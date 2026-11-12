@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#8d101b">
+<meta name="description" content="GD90 Monsterphone — 一台可以互動的紅色復古手機。">
+<title>GD90 Monsterphone｜拾機模擬器</title>
+<style>
+:root{--red:#a91422;--red2:#750b16;--shell:#b91d2c;--ink:#15231b;--lcd:#b8c9a0;--lcd2:#d4dfbf;--line:#657653;--silver:#bfc1bd}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Arial,"Noto Sans TC",sans-serif}
+body{background:radial-gradient(ellipse at 50% 24%,#f6e8df 0,#d9c7bd 44%,#9b8d88 100%);display:flex;align-items:center;justify-content:center;padding:22px 12px;color:#211b1b}
+.stage{width:min(100%,480px);display:flex;flex-direction:column;align-items:center;gap:14px}
+.brandline{font-size:11px;letter-spacing:.28em;color:#513c3c;text-transform:uppercase}
+.phone{width:min(330px,88vw);padding:17px 19px 21px;border-radius:35px 35px 43px 43px;background:linear-gradient(110deg,#d44850 0%,#b51c2b 17%,#94101e 55%,#c82b37 82%,#80101a 100%);border:1px solid #710b14;box-shadow:inset 2px 2px 4px #f58b8d,inset -4px -6px 9px #5b0710,0 24px 35px #35201f77,0 5px 0 #680b13;position:relative}
+.phone:before{content:"";position:absolute;inset:7px 8px;border-radius:29px 29px 37px 37px;border:1px solid #ed6870aa;pointer-events:none}
+.top{height:35px;display:flex;justify-content:center;align-items:flex-start;position:relative;color:#f8d8d6;text-shadow:0 1px 2px #590710}
+.logo{font-weight:800;font-size:13px;letter-spacing:.2em}.model{position:absolute;right:4px;top:2px;font-size:8px;letter-spacing:.12em;opacity:.8}
+.ear{width:48px;height:5px;border-radius:9px;background:linear-gradient(#4a1519,#e16b70 45%,#5a1018);position:absolute;left:50%;transform:translateX(-50%);top:28px}
+.screen-frame{background:linear-gradient(145deg,#5b6260,#222b29);padding:10px 12px 12px;border-radius:12px;border:2px solid #5a080f;box-shadow:inset 0 2px 6px #050807,0 2px 3px #e35b61}
+.screen{height:132px;background:linear-gradient(135deg,var(--lcd2),var(--lcd));border:2px solid #111a15;box-shadow:inset 0 0 13px #667a5a88;position:relative;color:var(--ink);padding:8px 9px;font-family:"Courier New",monospace;overflow:hidden;text-shadow:0 0 .2px #17251b}
+.status{display:flex;justify-content:space-between;font-size:10px;border-bottom:1px solid #65765380;padding-bottom:3px;margin-bottom:5px}
+.screen-title{font-size:12px;font-weight:bold;margin:4px 0 7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.screen-body{font-size:11px;line-height:1.42;white-space:pre-wrap;overflow:hidden;max-height:69px}
+.screen-foot{position:absolute;bottom:4px;left:8px;right:8px;display:flex;justify-content:space-between;font-size:9px;font-weight:bold}
+.signal{letter-spacing:-2px}
+.nav-area{height:80px;display:flex;align-items:center;justify-content:center;position:relative}
+.nav{width:88px;height:66px;border-radius:18px;background:linear-gradient(145deg,#e3e4df,#7c817d 55%,#d9d9d2);box-shadow:inset 1px 2px 4px #fff,0 3px 3px #5d0710;position:relative;display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:1fr 1fr 1fr;gap:2px;padding:5px}
+.nav button{border:0;background:linear-gradient(#d7d9d4,#8d928d);color:#28302c;font-size:12px;cursor:pointer;border-radius:7px;box-shadow:inset 0 1px 2px #fff8}
+.nav button:active,.key:active,.soft:active{filter:brightness(.82);transform:translateY(1px)}
+.nav .up{grid-column:2;grid-row:1}.nav .left{grid-column:1;grid-row:2}.nav .ok{grid-column:2;grid-row:2;background:linear-gradient(#b9c3ac,#78866c);font-size:9px;font-weight:bold}.nav .right{grid-column:3;grid-row:2}.nav .down{grid-column:2;grid-row:3}
+.softrow{display:flex;justify-content:space-between;padding:0 15px;margin-top:-7px}
+.soft{width:68px;height:25px;border:1px solid #650b13;border-radius:7px;background:linear-gradient(#f0d8d5,#aeb2a9);color:#2b2725;font-size:10px;font-weight:bold;box-shadow:0 2px 2px #56070e;cursor:pointer}
+.callrow{display:flex;justify-content:center;gap:60px;margin:9px 0 7px}
+.callkey{width:51px;height:27px;border-radius:7px;border:1px solid #222;background:linear-gradient(#39443e,#101713);color:#d6e0d3;font-size:16px;font-weight:bold;box-shadow:0 3px 3px #4c0710;cursor:pointer}
+.callkey.end{background:linear-gradient(#4c2526,#211011);color:#f5c9c8}
+.keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:7px 11px;padding:2px 8px 0}
+.key{height:40px;border-radius:9px;border:1px solid #690b14;background:linear-gradient(145deg,#e7e1d9 0%,#b9b9b1 55%,#8c8e89 100%);box-shadow:inset 0 1px 2px #fff,0 3px 2px #5b0710;color:#292c28;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:bold;font-size:17px}
+.key small{font-size:7px;font-weight:normal;letter-spacing:.1em;margin-top:0;color:#4e534d}
+.bottommark{text-align:center;color:#f4c7c5;font-size:8px;letter-spacing:.2em;margin-top:13px;text-shadow:0 1px #5a0710}
+.hint{font-size:11px;color:#514241;text-align:center;line-height:1.5;max-width:340px}
+.toast{min-height:18px;font-size:11px;color:#493635;text-align:center}
+button:focus-visible{outline:2px solid #ffe6a9;outline-offset:2px}
+@media(max-height:760px){.stage{gap:7px}.phone{transform:scale(.88);transform-origin:top center;margin-bottom:-65px}}
+</style>
+</head>
+<body>
+<main class="stage">
+<div class="brandline">A little piece of your story</div>
+<section class="phone" aria-label="Panasonic GD90 紅色手機">
+ <div class="top"><div class="logo">Panasonic</div><div class="model">GD90</div><div class="ear"></div></div>
+ <div class="screen-frame"><div class="screen" id="screen" aria-live="polite">
+  <div class="status"><span id="status-left">◧ Panasonic</span><span id="status-right">▮▮▮  ▰</span></div>
+  <div class="screen-title" id="screen-title">歡迎使用</div><div class="screen-body" id="screen-body">請按中間確認鍵
+開啟手機。</div>
+  <div class="screen-foot"><span id="soft-left">選項</span><span id="soft-right">返回</span></div>
+ </div></div>
+ <div class="nav-area"><div class="nav">
+  <button class="up" data-action="up" aria-label="上">▲</button><button class="left" data-action="left" aria-label="左">◀</button><button class="ok" data-action="ok" aria-label="確認">OK</button><button class="right" data-action="right" aria-label="右">▶</button><button class="down" data-action="down" aria-label="下">▼</button>
+ </div></div>
+ <div class="softrow"><button class="soft" id="soft-left-btn">選項</button><button class="soft" id="soft-right-btn">返回</button></div>
+ <div class="callrow"><button class="callkey" id="call-btn" aria-label="通話">☎</button><button class="callkey end" id="end-btn" aria-label="結束">■</button></div>
+ <div class="keypad" id="keypad">
+  <button class="key" data-key="1">1<small>　</small></button><button class="key" data-key="2">2<small>ABC</small></button><button class="key" data-key="3">3<small>DEF</small></button>
+  <button class="key" data-key="4">4<small>GHI</small></button><button class="key" data-key="5">5<small>JKL</small></button><button class="key" data-key="6">6<small>MNO</small></button>
+  <button class="key" data-key="7">7<small>PQRS</small></button><button class="key" data-key="8">8<small>TUV</small></button><button class="key" data-key="9">9<small>WXYZ</small></button>
+  <button class="key" data-key="*">*</button><button class="key" data-key="0">0<small>＋</small></button><button class="key" data-key="#">#</button>
+ </div>
+ <div class="bottommark">MOBILE PHONE · GD90</div>
+</section>
+<div class="toast" id="toast">按下手機中間的 OK 鍵開始</div>
+<div class="hint">使用方向鍵瀏覽選單，OK 確認，右側功能鍵返回。也可以直接點擊手機按鍵。</div>
+</main>
+<script>
+(()=>{
+const $=id=>document.getElementById(id);
+const contacts=[
+ {name:"溫尚翊",number:"0912-000-001",role:"男朋友・五月天吉他手",msgs:[
+  ["他","到宿舍了沒？"],["我","到了啦，學長你不要一直問。"],["他","誰一直問？我只是剛好想到。"],["他","外面下雨，傘有帶吧。"],["我","有啦！你很囉嗦欸。"],["他","好啦，知道妳有帶就好。晚點吃飯。"],["他","今天排練比較晚，妳先睡，不用等我。"],["我","可是我想等你回來。"],["他","……隨便妳啦。被子蓋好。"]]},
+ {name:"陳信宏",number:"0912-000-002",role:"學長・主唱",msgs:[
+  ["他","今天上課還順利嗎？"],["我","還可以，謝謝信宏學長！"],["他","那就好呀，剛剛看怪獸一直在看手機，應該是在等妳的訊息馁。"],["他","有時候他不太會講，但其實很關心妳的。"]]},
+ {name:"瑪莎",number:"0912-000-003",role:"學長・貝斯手",msgs:[
+  ["他","欸，妳有沒有發現某人今天心情很好？"],["我","誰呀？"],["他","還能有誰。手機拿起來就笑，真的很吵。"],["他","拜託妳管一下妳男朋友。"]]},
+ {name:"石頭",number:"0912-000-004",role:"學長・吉他手",msgs:[
+  ["他","最近期中考還好嗎？不要太累了。"],["我","有一點忙，不過還可以！"],["他","忙的時候也要記得吃飯。尚翊有時候比較不會說好聽話，但他是真的很在意妳。"]]},
+ {name:"冠佑",number:"0912-000-005",role:"學長・鼓手",msgs:[
+  ["他","妳好，最近天氣變化大，出門記得帶外套。"],["我","好的，謝謝冠佑學長！"],["他","不客氣。有事情需要幫忙，隨時打給我們。"]]}
+];
+let state={started:false,screen:"home",menu:0,contact:0,msgContact:0,callContact:0,dial:"",thread:0,threadScroll:0,compose:"",history:[
+ {name:"溫尚翊",type:"已接來電",time:"今天 21:16",duration:"08:42"},
+ {name:"溫尚翊",type:"撥出電話",time:"昨天 23:48",duration:"12:06"},
+ {name:"陳信宏",type:"已接來電",time:"昨天 18:20",duration:"03:15"},
+ {name:"瑪莎",type:"未接來電",time:"週一 14:02",duration:"—"},
+ {name:"溫尚翊",type:"未接來電",time:"週一 00:31",duration:"—"}
+]};
+const menus=["訊息","電話簿","通話紀錄","撥號","時鐘","個人化","手機設定"];
+const save=()=>{try{localStorage.setItem("gd90-monsterphone-save",JSON.stringify(state))}catch(e){}};
+try{const s=JSON.parse(localStorage.getItem("gd90-monsterphone-save")||"null");if(s)state={...state,...s}}catch(e){}
+function toast(t){$("toast").textContent=t;clearTimeout(toast.t);toast.t=setTimeout(()=>$("toast").textContent="方向鍵瀏覽・OK 確認・返回退出",2600)}
+function draw(title,body,left="選項",right="返回"){ $("screen-title").textContent=title;$("screen-body").textContent=body;$("soft-left").textContent=left;$("soft-right").textContent=right;$("soft-left-btn").textContent=left;$("soft-right-btn").textContent=right;$("status-left").textContent=state.started?"◧ Panasonic":"◧ GD90";$("status-right").textContent="▮▮▮  ▰"; }
+function enter(){state.started=true;state.screen="home";state.menu=0;render();toast("手機已開機。歡迎回來。")}
+function render(){
+ if(!state.started){draw("Panasonic GD90","歡迎使用
+請按中間確認鍵
+開啟手機。","開機","");return}
+ switch(state.screen){
+ case"home":draw("主選單",menus.map((x,i)=>(i===state.menu?"▶ ":"  ")+x).join("\n"),"選擇","關機");break;
+ case"messages":{const c=contacts[state.msgContact];draw("訊息・收件匣",contacts.map((x,i)=>(i===state.menu?"▶ ":"  ")+x.name+"  "+x.msgs.length+"則").join("\n"),"閱讀","返回");break}
+ case"thread":{const c=contacts[state.msgContact];const all=c.msgs;const start=Math.max(0,Math.min(state.threadScroll,all.length-3));const shown=all.slice(start,start+4).map(m=>(m[0]==="我"?"我":"")+": "+m[1]).join("\n");draw(c.name,shown+"\n"+(state.compose?"輸入："+state.compose:""),"回覆","返回");break}
+ case"contacts":draw("電話簿",contacts.map((x,i)=>(i===state.contact?"▶ ":"  ")+x.name).join("\n"),"詳細","返回");break;
+ case"contact":{const c=contacts[state.contact];draw(c.name,c.number+"\n"+c.role+"\n\nOK：傳送訊息\n通話鍵：撥打電話","訊息","返回");break}
+ case"history":draw("通話紀錄",state.history.slice(0,5).map((h,i)=>(i===state.menu?"▶ ":"  ")+h.name+" "+h.type).join("\n"),"詳細","返回");break;
+ case"historyDetail":{const h=state.history[state.menu];draw(h.name,h.type+"\n"+h.time+"\n通話時間："+h.duration,"撥打","返回");break}
+ case"dial":draw("撥號",state.dial||"請輸入電話號碼", "撥打","清除");break;
+ case"clock":draw("時鐘",new Date().toLocaleString("zh-TW",{hour12:false})+"\n\n鬧鐘　關閉\n世界時間　台北","設定","返回");break;
+ case"personal":draw("個人化","鈴聲：經典鈴聲\n音量：3\n螢幕對比：中","變更","返回");break;
+ case"settings":draw("手機設定","語言：繁體中文\n鍵盤鎖：關閉\n自動存檔：開啟\n清除本機存檔","選擇","返回");break;
+ case"call":draw("通話中",state.callName+"\n"+state.callNumber+"\n\n00:00","靜音","結束");break;
+ case"poweroff":draw("已關機","再按 OK 可重新開機。","","開機");break;
+ }
+ save();
+}
+function back(){if(!state.started||state.screen==="poweroff"){state.started=false;render();return}
+ const map={thread:"messages",messages:"home",contacts:"home",contact:"contacts",history:"home",historyDetail:"history",dial:"home",clock:"home",personal:"home",settings:"home",call:"home"};state.screen=map[state.screen]||"home";state.menu=0;render()}
+function move(d){if(!state.started){if(d==="ok")enter();return}
+ let max=0;
+ if(state.screen==="home")max=menus.length;
+ else if(state.screen==="messages")max=contacts.length;
+ else if(state.screen==="contacts")max=contacts.length;
+ else if(state.screen==="history")max=state.history.length;
+ else if(state.screen==="thread"){if(d==="up")state.threadScroll=Math.max(0,state.threadScroll-1);if(d==="down")state.threadScroll=Math.min(contacts[state.msgContact].msgs.length-1,state.threadScroll+1);render();return}
+ else return;
+ if(d==="up")state.menu=(state.menu+max-1)%max;
+ if(d==="down")state.menu=(state.menu+1)%max;
+ if(d==="ok"){
+  if(state.screen==="home"){const m=["messages","contacts","history","dial","clock","personal","settings"];state.screen=m[state.menu];state.menu=0}
+  else if(state.screen==="messages"){state.msgContact=state.menu;state.threadScroll=Math.max(0,contacts[state.msgContact].msgs.length-4);state.screen="thread"}
+  else if(state.screen==="contacts"){state.contact=state.menu;state.screen="contact"}
+  else if(state.screen==="history")state.screen="historyDetail";
+ }
+ render()
+}
+function call(name,num){state.callName=name;state.callNumber=num;state.screen="call";state.history.unshift({name,type:"撥出電話",time:"剛剛",duration:"00:00"});render();toast("正在撥號……")}
+function endCall(){if(state.screen==="call"){state.screen="home";toast("通話已結束");render()}else back()}
+function sendReply(){const c=contacts[state.msgContact];const replies=["好啦，我知道了！","你也要記得休息。","嗯嗯，晚安。","我等你回來。"];const r=replies[Math.floor(Math.random()*replies.length)];c.msgs.push(["我",r]);if(state.msgContact===0)c.msgs.push(["他","知道就好。不要太晚睡，聽到沒。"]);state.threadScroll=Math.max(0,c.msgs.length-4);render();toast("訊息已送出")}
+function key(k){if(!state.started){enter();return}if(state.screen==="dial"){if(k==="*")state.dial=state.dial.slice(0,-1);else state.dial+=k;render()}else if(state.screen==="thread"){state.compose+=k;render()}else if(state.screen==="home"){if(k==="2")move("up");if(k==="8")move("down");if(k==="5")move("ok")}}
+document.querySelectorAll("[data-action]").forEach(b=>b.addEventListener("click",()=>{const a=b.dataset.action;if(a==="left")back();else if(a==="right")move("down");else move(a)}));
+$("soft-left-btn").addEventListener("click",()=>{if(!state.started){enter();return}if(state.screen==="thread"){sendReply();return}if(state.screen==="contact"){state.msgContact=state.contact;state.threadScroll=Math.max(0,contacts[state.msgContact].msgs.length-4);state.screen="thread";render();return}if(state.screen==="historyDetail"){call(state.history[state.menu].name,contacts.find(c=>c.name===state.history[state.menu].name)?.number||"");return}if(state.screen==="dial"){if(state.dial)call("未知號碼",state.dial);return}move("ok")});
+$("soft-right-btn").addEventListener("click",()=>{if(state.screen==="dial"){state.dial=state.dial.slice(0,-1);render()}else back()});
+$("call-btn").addEventListener("click",()=>{if(state.screen==="contact"){const c=contacts[state.contact];call(c.name,c.number)}else if(state.screen==="dial"){call("未知號碼",state.dial||"");}else{const c=contacts[0];call(c.name,c.number)}});
+$("end-btn").addEventListener("click",endCall);
+document.querySelectorAll("[data-key]").forEach(b=>b.addEventListener("click",()=>key(b.dataset.key)));
+document.addEventListener("keydown",e=>{if(["ArrowUp","ArrowDown","ArrowLeft","ArrowRight","Enter","Escape","Backspace"].includes(e.key)){e.preventDefault();({ArrowUp:()=>move("up"),ArrowDown:()=>move("down"),ArrowLeft:back,ArrowRight:()=>move("down"),Enter:()=>move("ok"),Escape:back,Backspace:()=>key("*")})[e.key]()}else if(/^[0-9*#]$/.test(e.key))key(e.key)});
+render();
+})();
+</script>
+</body></html>
